@@ -53,10 +53,9 @@ def get_pie_chart(entered_site):
         return fig
     else:
         # return the outcomes piechart for a selected site
-        filtered_df=spacex_df[spacex_df["Launch Site"]==entered_site]
-        filtered_df1 = filtered_df.groupby(['class','Launch Site'])['class'].count()  #use groupby count and two columns launch suite and class
-        print(filtered_df1.head())
-        fig = px.pie(filtered_df1, values='class',names='class',title=f'Total Success Launches for {entered_site} site')
+        filtered_df=filtered_df[filtered_df["Launch Site"]==entered_site]
+        filtered_df = filtered_df.groupby(['class','Launch Site'])['class'].count()
+        fig = px.pie(filtered_df, values='class',names='class',title=f'Total Success Launches for {entered_site} site')
         return fig
 
 # TASK 4:
@@ -66,10 +65,14 @@ def get_pie_chart(entered_site):
 def get_scatter_chart(entered_site,payload_mass):
     filtered_df = spacex_df
     if entered_site == 'ALL':
+        filtered_df = filtered_df[filtered_df['Payload Mass (kg)']>payload_mass[0]]
+        filtered_df = filtered_df[filtered_df['Payload Mass (kg)']<payload_mass[1]]
         fig = px.scatter(filtered_df,x="Payload Mass (kg)",y="class",color="Booster Version Category",title=f"Correlation between Payload and Success for {entered_site} site")
         return fig
     else:
         filtered_df = spacex_df[spacex_df['Launch Site'] == entered_site]
+        filtered_df = filtered_df[filtered_df['Payload Mass (kg)']>payload_mass[0]]
+        filtered_df = filtered_df[filtered_df['Payload Mass (kg)']<payload_mass[1]]
         fig = px.scatter(filtered_df,x="Payload Mass (kg)",y="class",color="Booster Version Category",title=f"Correlation between Payload and Success for {entered_site} site")
         return fig
 # Run the app
